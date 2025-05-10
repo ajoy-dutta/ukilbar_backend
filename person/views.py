@@ -16,21 +16,30 @@ class RegisterView(APIView):
             return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 class ProtectedView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({'message': 'This is a protected view.'})
-
+        user = request.user
+        user_data = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+        }
+        return Response({'userData': user_data})
 
 
 #Advocate
 class AdvocateListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Advocate.objects.all()
     serializer_class = AdvocateSerializer
 
 
 class AdvocateRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Advocate.objects.all()
     serializer_class = AdvocateSerializer
     lookup_field = 'id'
@@ -40,10 +49,14 @@ class AdvocateRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 #Building
 class BuildingListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Building.objects.all()
     serializer_class = BuildingSerializer
 
+
+
 class BuildingRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Building.objects.all()
     serializer_class = BuildingSerializer
     lookup_field = 'id'
@@ -51,10 +64,14 @@ class BuildingRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 #Form
 class FormModelListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = FormModel.objects.all()
     serializer_class = FormModelSerializer
 
+
+
 class FormModelRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = FormModel.objects.all()
     serializer_class = FormModelSerializer
     lookup_field = 'id'
@@ -62,11 +79,14 @@ class FormModelRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 #Renter
 class RenterListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Renter.objects.all()
     serializer_class = RenterSerializer
 
 
+
 class RenterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Renter.objects.all()
     serializer_class = RenterSerializer
     lookup_field = 'id'
@@ -76,11 +96,14 @@ class RenterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 #Bank
 class BankListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Bank.objects.all()
     serializer_class = BankSerializer
 
 
+
 class BankRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Bank.objects.all()
     serializer_class = BankSerializer
     lookup_field = 'id'
