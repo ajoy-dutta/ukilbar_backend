@@ -53,8 +53,8 @@ class Advocate(models.Model):
     permanent_address = models.TextField(blank=True)
 
     # Contact
-    phone = models.CharField(max_length=15)
-    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=15, blank=True, null= True)
+    email = models.EmailField(blank=True, null = True)
 
     # Education & Bar Info
     education = models.CharField(max_length=200, blank=True)
@@ -107,7 +107,6 @@ class Renter(models.Model):
     phone = models.CharField(max_length=15)
     category = models.CharField(max_length=100)
     remarks = models.TextField(blank=True)
-
     building_name = models.ForeignKey('Building', on_delete=models.CASCADE, related_name='renters')
     floor_no = models.CharField(max_length=10)
     room_no = models.CharField(max_length=10)
