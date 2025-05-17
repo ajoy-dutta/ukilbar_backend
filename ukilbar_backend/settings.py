@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-6xeay&#3de)67$d&^b(qx6je+6vo0*%+od^o8j_9(opt(+9zns
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ukilbar.online', 'www.ukilbar.online', '86.48.3.219', '127.0.0.1']
 
 
 # Application definition
@@ -45,15 +45,21 @@ ROOT_URLCONF = 'ukilbar_backend.urls'
 
 
 
+# CORS configuration
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173"
+    "http://localhost:5173", 
+    "https://ukilbar.online",
+    "http://ukilbar.online" 
 ]
 
 
 
+# For handling CSRF with cross-origin requests
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",  
-    
+    "http://localhost:5173", 
+    'https://ukilbar.online',
+    'https://www.ukilbar.online',
+    'http://127.0.0.1',
 ]
 
 

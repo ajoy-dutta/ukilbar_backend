@@ -62,14 +62,14 @@ class BailbondSalesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bailbond
-        fields = ['id', 'receipt_no', 'sales_date','building_name','remarks','bailbond_serials']
+        fields = ['id', 'receipt_no', 'sales_date','building_name','remarks', 'total_count', 'total_amount','bailbond_serials']
 
     def create(self, validated_data):
         serials_data = validated_data.pop('bailbond_serials')
         print(serials_data)
-        sale = Vokalatnama.objects.create(**validated_data)
+        sale = Bailbond.objects.create(**validated_data)
         for serial_data in serials_data:
-            VokalatnamaSerial.objects.create(sale=sale, **serial_data)
+            BailbondSerial.objects.create(sale=sale, **serial_data)
         return sale
     
 
@@ -83,6 +83,6 @@ class BailbondSalesSerializer(serializers.ModelSerializer):
         if serials_data is not None:
             instance.serials.all().delete()
             for serial_data in serials_data:
-                VokalatnamaSerial.objects.create(sale=instance, **serial_data)
+                BailbondSerial.objects.create(sale=instance, **serial_data)
 
         return instance
