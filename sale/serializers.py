@@ -17,9 +17,9 @@ class VokalatnamaSalesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vokalatnama
         fields = [
-            'id', 'receipt_no', 'sales_date', 'advocate_name', 'advocateId',
+            'id', 'receipt_no', 'sale_type', 'sales_date', 'advocate_name', 'advocateId',
             'building_name', 'address', 'customer_phone', 'customer_name',
-            'customer_address', 'total_count', 'total_amount', 'serials'
+            'customer_address','price', 'total_count', 'total_amount', 'serials'
         ]
 
     def create(self, validated_data):

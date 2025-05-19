@@ -5,6 +5,7 @@ from person.models import Advocate
 
 class Vokalatnama(models.Model):
     receipt_no = models.CharField(max_length=255, blank=True, null = True)
+    sale_type = models.CharField(max_length=255, blank= True, null = True)
     advocate_name = models.CharField(max_length=50, blank=True, null = True)
     advocateId = models.CharField(max_length=50, blank=True, null = True)
     building_name = models.CharField(max_length=100,blank=True, null = True)

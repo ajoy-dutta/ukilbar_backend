@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import *
 from rest_framework import status
 from rest_framework import generics
@@ -18,17 +19,8 @@ class RegisterView(APIView):
 
 
 
-class ProtectedView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user = request.user
-        user_data = {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-        }
-        return Response({'userData': user_data})
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 #Advocate
