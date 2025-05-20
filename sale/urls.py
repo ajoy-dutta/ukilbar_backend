@@ -8,5 +8,10 @@ urlpatterns = [
 
     path('bailbond/', bailBondListCreateView.as_view(), name='bailbond-list-create'),
     path('bailbond/<int:id>/', bailBondRetrieveUpdateDestroyView.as_view(), name='bailbond-detail'),
+
+    path('associate-renewal/', AssociateRenewalListCreateView.as_view(), name='associate-renewal-list-create'),
+    path('associate-renewal/<int:id>/', AssociateRenewalRetrieveUpdateDeleteView.as_view(), name='associate-renewal-detail'),
+
+    path('advocate-all-fees/', ConsolidatedFeeView.as_view(), name='advocate-all-fees'),
     
 ]

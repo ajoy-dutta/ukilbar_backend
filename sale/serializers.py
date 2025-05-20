@@ -86,3 +86,30 @@ class BailbondSalesSerializer(serializers.ModelSerializer):
                 BailbondSerial.objects.create(sale=instance, **serial_data)
 
         return instance
+    
+
+
+
+class AssociateRenewalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssociateRenewal
+        fields = '__all__'
+
+
+
+class HouseRentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentCollection
+        fields = '__all__'
+
+
+class MonthlyFeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MonthlyFee
+        fields = '__all__'
+
+
+class BarFeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarAssociationFee
+        fields = '__all__'

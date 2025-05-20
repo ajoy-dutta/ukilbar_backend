@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
@@ -35,3 +37,53 @@ class bailBondRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Bailbond.objects.all()
     serializer_class = BailbondSalesSerializer
     lookup_field = 'id'
+
+
+
+class AssociateRenewalListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = AssociateRenewal.objects.all().order_by('-renewal_date')
+    serializer_class = AssociateRenewalSerializer
+
+
+class AssociateRenewalRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = AssociateRenewal.objects.all()
+    serializer_class = AssociateRenewalSerializer
+    lookup_field = 'id'
+
+
+
+class ConsolidatedFeeView(APIView):
+    def post(self, request):
+        data = request.data
+
+
+        if data.get('house_fee_form') and data.get('house_rent'):
+            house_serializer = HouseRentSerializer(data = data['house_rent'])
+            if house_serializer.is_valid():
+                house_serializer.save()
+            else:
+                return Response({'house_rent_errors': house_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            
+        
+
+        if data.get('monthly_fee_form') and data.get('monthly_fee'):
+            MonthlyFee_serializer = MonthlyFeeSerializer(data = data['monthly_fee'])
+            if MonthlyFee_serializer.is_valid():
+                MonthlyFee_serializer.save()
+            else:
+                return Response({'monthly_fee_errors': MonthlyFee_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            
+
+
+        if data.get('bar_association_form') and data.get('bar_association_fee'):
+            BarFee_serializer = BarFeeSerializer(data = data['bar_association_fee'])
+            if BarFee_serializer.is_valid():
+                BarFee_serializer.save()
+            else:
+                return Response({'bar_fee_errors': BarFee_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        return Response({'message': 'Data saved successfully'}, status=status.HTTP_201_CREATED)
+
