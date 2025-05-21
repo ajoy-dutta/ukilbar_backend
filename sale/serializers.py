@@ -90,10 +90,19 @@ class BailbondSalesSerializer(serializers.ModelSerializer):
 
 
 
+class AssociateRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssociateRegistration
+        fields = '__all__'
+
+        
+
+
 class AssociateRenewalSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssociateRenewal
         fields = '__all__'
+
 
 
 
@@ -103,10 +112,21 @@ class HouseRentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+
+class HallRentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HallRentCollection
+        fields = '__all__'
+
+
+
+
 class MonthlyFeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MonthlyFee
         fields = '__all__'
+
 
 
 class BarFeeSerializer(serializers.ModelSerializer):

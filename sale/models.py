@@ -64,25 +64,31 @@ class BailbondSerial(models.Model):
 
 
 
-class AssociateRenewal(models.Model):
+class AssociateRegistration(models.Model):
     receipt_no = models.CharField(max_length=100, blank=True)
-    renewal_date = models.DateField()
+    registration_date = models.DateField()
     license_no = models.CharField(max_length=100, blank=True, null = True)
     name = models.CharField(max_length=255, blank=True, null = True)
-    year = models.IntegerField()
     advocate_name = models.CharField(max_length=255)
     advocate_id = models.CharField(max_length=100)
-    type = models.CharField(max_length=50, choices=[("New", "New"), ("Old", "Old")],blank=True, null = True)
     entry_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     book_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    renewal_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     remarks = models.TextField(blank=True, null = True)
 
     def save(self, *args, **kwargs):
-        self.total = self.entry_fee + self.book_rate + self.renewal_fee
+        self.total = self.entry_fee + self.book_rate 
         super().save(*args, **kwargs)
 
+
+
+class AssociateRenewal(models.Model):
+    receipt_no = models.CharField(max_length=100, blank=True)
+    associate = models.ForeignKey(AssociateRegistration, on_delete=models.CASCADE, related_name='renewals')
+    renewal_date = models.DateField()
+    renewal_end_date = models.DateField()
+    renewal_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 
@@ -103,6 +109,28 @@ class RentCollection(models.Model):
 
     def __str__(self):
         return f"{self.rent_type} Rent - {self.month} {self.year} - {self.advocate_id}"
+    
+
+
+class HallRentCollection(models.Model):
+    receipt_no = models.CharField(max_length=20)
+    collection_date = models.DateField()
+    renter_name = models.CharField(max_length=20)
+    from_year = models.PositiveIntegerField(blank=True, null = True)
+    from_month = models.CharField(max_length=20)
+    to_year = models.PositiveIntegerField(blank=True, null = True)
+    to_month = models.CharField(max_length=20)
+    building_name = models.CharField(max_length=255)
+    floor = models.CharField(max_length=50, blank=True, null = True)
+    room = models.CharField(max_length=50, blank=True, null = True)
+    rent_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_type = models.CharField(max_length=50, blank=True, null = True)
+    remarks1 = models.TextField(blank=True, null = True)
+
+    def __str__(self):
+        return f"{self.renter_name} Rent - {self.from_month} {self.from_year}"
+
+
 
 
 

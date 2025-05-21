@@ -16,7 +16,6 @@ class vokalotnamaListCreateView(generics.ListCreateAPIView):
     serializer_class = VokalatnamaSalesSerializer
 
 
-
 class vokalotnamaRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Vokalatnama.objects.all()
@@ -25,11 +24,13 @@ class vokalotnamaRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView
 
 
 
+
+
+
 class bailBondListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Bailbond.objects.all().order_by('-id')
     serializer_class = BailbondSalesSerializer
-
 
 
 class bailBondRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
@@ -40,17 +41,37 @@ class bailBondRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
+
+
+
+class AssociateRegistrationListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = AssociateRegistration.objects.all().order_by('-registration_date')
+    serializer_class = AssociateRegistrationSerializer
+
+
+class AssociateRegistrationRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = AssociateRegistration.objects.all()
+    serializer_class = AssociateRegistrationSerializer
+    lookup_field = 'id'
+
+
+
+
+
+
 class AssociateRenewalListCreateView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = AssociateRenewal.objects.all().order_by('-renewal_date')
-    serializer_class = AssociateRenewalSerializer
-
-
-class AssociateRenewalRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = AssociateRenewal.objects.all()
     serializer_class = AssociateRenewalSerializer
-    lookup_field = 'id'
+
+
+class AssociateRenewalDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = AssociateRenewal.objects.all()
+    serializer_class = AssociateRenewalSerializer
+    lookup_field = 'id' 
+
+
 
 
 
@@ -87,3 +108,17 @@ class ConsolidatedFeeView(APIView):
 
         return Response({'message': 'Data saved successfully'}, status=status.HTTP_201_CREATED)
 
+
+
+
+
+
+class HallRentListCreateView(generics.ListCreateAPIView):
+    queryset = HallRentCollection.objects.all()
+    serializer_class = HallRentSerializer
+
+
+class HallRentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = HallRentCollection.objects.all()
+    serializer_class = HallRentSerializer
+    lookup_field = 'id' 
