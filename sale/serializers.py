@@ -133,3 +133,21 @@ class BarFeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = BarAssociationFee
         fields = '__all__'
+
+
+
+class AdvocateChangeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdvocateChange
+        fields = '__all__'
+        read_only_fields = ['receipt_no']
+
+
+
+
+class FundCollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FundCollection
+        fields = '__all__'
+
+

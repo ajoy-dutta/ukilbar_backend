@@ -17,7 +17,16 @@ urlpatterns = [
 
     path('advocate-all-fees/', ConsolidatedFeeView.as_view(), name='advocate-all-fees'),
 
-    path('hall-rent/', HallRentListCreateView.as_view(), name='hall-rent-create'),
-    path('hall-rent/<int:id>/', HallRentDetailView.as_view(), name='hall-rent-detail'),
+    path('shop-rent/', HallRentListCreateView.as_view(), name='shop-rent-create'),
+    path('shop-rent/<int:id>/', HallRentDetailView.as_view(), name='shop-rent-detail'),
+
+    path('advocate-change/', AdvocateChangeListCreateView.as_view(), name='advocate-change-list-create'),
+    path('advocate-change/<int:id>/', AdvocateChangeDetailView.as_view(), name='advocate-change-detail'),
+
+
+    path('fund-collection/', FundCollectionListCreateAPIView.as_view(), name='fund-collection'),
+    path('fund-collection/<int:id>/', FundCollectionDetailView.as_view(), name='fund-collection-detail'),
+
+
     
 ]

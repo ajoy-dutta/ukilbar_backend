@@ -62,11 +62,13 @@ class AssociateRegistrationRetrieveUpdateDeleteView(generics.RetrieveUpdateDestr
 
 
 class AssociateRenewalListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = AssociateRenewal.objects.all()
     serializer_class = AssociateRenewalSerializer
 
 
 class AssociateRenewalDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = AssociateRenewal.objects.all()
     serializer_class = AssociateRenewalSerializer
     lookup_field = 'id' 
@@ -76,6 +78,7 @@ class AssociateRenewalDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ConsolidatedFeeView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         data = request.data
 
@@ -114,11 +117,44 @@ class ConsolidatedFeeView(APIView):
 
 
 class HallRentListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = HallRentCollection.objects.all()
     serializer_class = HallRentSerializer
 
 
 class HallRentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = HallRentCollection.objects.all()
     serializer_class = HallRentSerializer
+    lookup_field = 'id' 
+
+
+
+
+
+class AdvocateChangeListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = AdvocateChange.objects.all().order_by('-date')
+    serializer_class = AdvocateChangeSerializer
+
+
+class AdvocateChangeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = AdvocateChange.objects.all()
+    serializer_class = AdvocateChangeSerializer
+    lookup_field = 'id' 
+
+
+
+
+
+
+class FundCollectionListCreateAPIView(generics.ListCreateAPIView):
+    queryset = FundCollection.objects.all()
+    serializer_class = FundCollectionSerializer
+
+
+class FundCollectionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = FundCollection.objects.all()
+    serializer_class = FundCollectionSerializer
     lookup_field = 'id' 

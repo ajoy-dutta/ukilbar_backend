@@ -1,5 +1,6 @@
 from django.db import models
 from person.models import Advocate
+from django.utils import timezone
 
 
 
@@ -113,7 +114,7 @@ class RentCollection(models.Model):
 
 
 class HallRentCollection(models.Model):
-    receipt_no = models.CharField(max_length=20)
+    receipt_no = models.CharField(max_length=20, blank=True, null=True)
     collection_date = models.DateField()
     renter_name = models.CharField(max_length=20)
     from_year = models.PositiveIntegerField(blank=True, null = True)
@@ -170,3 +171,62 @@ class BarAssociationFee(models.Model):
 
     def __str__(self):
         return f"Bar Association Fee - {self.advocate_id} ({self.yearly_from_year} to {self.yearly_to_year})"
+
+
+
+class AdvocateChange(models.Model):
+    receipt_no = models.CharField(max_length=10, unique=True, blank=True)
+    date = models.DateField(default=timezone.now)
+    client_name = models.CharField(max_length=255)
+    advocate_id = models.CharField(max_length=100)
+    advocate_name = models.CharField(max_length=255)
+    fee = models.DecimalField(max_digits=10, decimal_places=2)
+    case_no = models.CharField(max_length=100)
+    remarks = models.TextField(blank=True, null=True)
+
+
+    def save(self, *args, **kwargs):
+        if not self.receipt_no:
+            prefix = "acf"
+            last_entry = AdvocateChange.objects.filter(receipt_no__startswith=prefix).order_by('-id').first()
+            if last_entry:
+                last_number = int(last_entry.receipt_no[len(prefix):])
+                new_number = str(last_number + 1).zfill(6)
+            else:
+                new_number = "000001"
+            self.receipt_no = f"{prefix}{new_number}"
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return f"{self.receipt_no} - {self.client_name}"
+    
+
+
+
+
+class FundCollection(models.Model):
+    donation_type = models.CharField(max_length=50)
+    receipt_no = models.CharField(max_length=100, unique=True,blank=True)
+    date = models.DateField()
+    fund_provider = models.CharField(max_length=255)
+    fund_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_type = models.CharField(max_length=10)
+    remarks = models.TextField(blank=True, null=True)
+    purpose = models.CharField(max_length=255)
+
+
+    def save(self, *args, **kwargs):
+        if not self.receipt_no:
+            prefix = "f"
+            last_entry = FundCollection.objects.filter(receipt_no__startswith=prefix).order_by('-id').first()
+            if last_entry:
+                last_number = int(last_entry.receipt_no[len(prefix):])
+                new_number = str(last_number + 1).zfill(6)
+            else:
+                new_number = "000001"
+            self.receipt_no = f"{prefix}{new_number}"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.receipt_no} - {self.fund_provider}"
