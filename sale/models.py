@@ -230,3 +230,30 @@ class FundCollection(models.Model):
 
     def __str__(self):
         return f"{self.receipt_no} - {self.fund_provider}"
+    
+
+
+
+
+class EntryFee(models.Model):
+    advocate_id = models.CharField(max_length=20)
+    collection_date = models.DateField()
+    entry_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    remarks4 = models.TextField(blank=True, null=True)
+    receipt_no = models.CharField(max_length=100, blank=True, null=True)
+
+
+    def save(self, *args, **kwargs):
+        if not self.receipt_no:
+            prefix = "EF"
+            last_entry = EntryFee.objects.filter(receipt_no__startswith=prefix).order_by('-id').first()
+            if last_entry:
+                last_number = int(last_entry.receipt_no[len(prefix):])
+                new_number = str(last_number + 1).zfill(6)
+            else:
+                new_number = "000001"
+            self.receipt_no = f"{prefix}{new_number}"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Entry Fee for Advocate {self.advocate_id} on {self.collection_date}"

@@ -151,3 +151,9 @@ class FundCollectionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+
+class EntryFeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EntryFee
+        fields = '__all__'

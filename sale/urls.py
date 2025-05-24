@@ -28,5 +28,9 @@ urlpatterns = [
     path('fund-collection/<int:id>/', FundCollectionDetailView.as_view(), name='fund-collection-detail'),
 
 
+    path('entry-fees/', EntryFeeListCreateAPIView.as_view(), name='entry-fee-list-create'),
+    path('entry-fees/<int:id>/', EntryFeeDetailView.as_view(), name='entry-fee-details'),
+
+
     
 ]

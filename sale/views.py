@@ -158,3 +158,17 @@ class FundCollectionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = FundCollection.objects.all()
     serializer_class = FundCollectionSerializer
     lookup_field = 'id' 
+
+
+
+
+
+class EntryFeeListCreateAPIView(generics.ListCreateAPIView):
+    queryset = EntryFee.objects.all()
+    serializer_class = EntryFeeSerializer
+
+
+class EntryFeeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = EntryFee.objects.all()
+    serializer_class = EntryFeeSerializer
+    lookup_field = 'id'
