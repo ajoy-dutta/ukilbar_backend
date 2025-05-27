@@ -20,6 +20,7 @@ class Vokalatnama(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null = True)
     total_count = models.IntegerField()
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
 
     def __str__(self):
@@ -34,6 +35,7 @@ class VokalatnamaSerial(models.Model):
     to_serial = models.IntegerField()
     total = models.IntegerField()
 
+
     def __str__(self):
         return f"Serial {self.from_serial} to {self.to_serial}"
     
@@ -47,6 +49,7 @@ class Bailbond(models.Model):
     total_count = models.IntegerField(blank=True, null = True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null = True)
     remarks = models.TextField(blank=True, null = True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
 
     def __str__(self):
@@ -76,6 +79,7 @@ class AssociateRegistration(models.Model):
     book_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     remarks = models.TextField(blank=True, null = True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
     def save(self, *args, **kwargs):
         self.total = self.entry_fee + self.book_rate 
@@ -89,7 +93,7 @@ class AssociateRenewal(models.Model):
     renewal_date = models.DateField()
     renewal_end_date = models.DateField()
     renewal_fee = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
 
 
@@ -107,6 +111,7 @@ class RentCollection(models.Model):
     rent_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_type = models.CharField(max_length=50, blank=True, null = True)
     remarks1 = models.TextField(blank=True, null = True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
     def __str__(self):
         return f"{self.rent_type} Rent - {self.month} {self.year} - {self.advocate_id}"
@@ -127,6 +132,7 @@ class HallRentCollection(models.Model):
     rent_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_type = models.CharField(max_length=50, blank=True, null = True)
     remarks1 = models.TextField(blank=True, null = True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
     def __str__(self):
         return f"{self.renter_name} Rent - {self.from_month} {self.from_year}"
@@ -147,6 +153,7 @@ class MonthlyFee(models.Model):
     total_monthly_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     monthly_payment_type = models.CharField(max_length=50)  
     remarks2 = models.TextField(blank=True, null = True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
     def __str__(self):
         return f"Monthly Fee - {self.advocate_id} ({self.from_month}/{self.from_year} to {self.to_month}/{self.to_year})"
@@ -168,6 +175,7 @@ class BarAssociationFee(models.Model):
     total_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     court_type = models.CharField(max_length=100) 
     remarks3 = models.TextField(blank=True, null = True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
     def __str__(self):
         return f"Bar Association Fee - {self.advocate_id} ({self.yearly_from_year} to {self.yearly_to_year})"
@@ -183,6 +191,7 @@ class AdvocateChange(models.Model):
     fee = models.DecimalField(max_digits=10, decimal_places=2)
     case_no = models.CharField(max_length=100)
     remarks = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
 
     def save(self, *args, **kwargs):
@@ -214,6 +223,7 @@ class FundCollection(models.Model):
     payment_type = models.CharField(max_length=10)
     remarks = models.TextField(blank=True, null=True)
     purpose = models.CharField(max_length=255)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
 
     def save(self, *args, **kwargs):
@@ -234,14 +244,14 @@ class FundCollection(models.Model):
 
 
 
-
 class EntryFee(models.Model):
     advocate_id = models.CharField(max_length=20)
     collection_date = models.DateField()
     entry_fee = models.DecimalField(max_digits=10, decimal_places=2)
     remarks4 = models.TextField(blank=True, null=True)
     receipt_no = models.CharField(max_length=100, blank=True, null=True)
-
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
+    
 
     def save(self, *args, **kwargs):
         if not self.receipt_no:
@@ -257,3 +267,67 @@ class EntryFee(models.Model):
 
     def __str__(self):
         return f"Entry Fee for Advocate {self.advocate_id} on {self.collection_date}"
+
+
+
+
+
+class BillCollection(models.Model):
+    PAYMENT_TYPE_CHOICES = [
+        ('cash', 'Cash'),
+        ('check', 'Check'),
+    ]
+
+    receipt_no = models.CharField(max_length=50, unique=True, blank=True)
+    collection_date = models.DateField()
+    month = models.CharField(max_length=20)
+    year = models.CharField(max_length=4)
+    building_name = models.CharField(max_length=100)
+    bill_payer_name = models.CharField(max_length=100)
+    bill_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPE_CHOICES, default='cash')
+    remarks = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
+
+
+    def save(self, *args, **kwargs):
+        if not self.receipt_no:
+            last = BillCollection.objects.order_by('-id').first()
+            if last and last.receipt_no.startswith('ECB'):
+                last_number = int(last.receipt_no[4:])
+                self.receipt_no = f'ECB{last_number + 1:04d}'
+            else:
+                self.receipt_no = 'ECB0001'
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.receipt_no} - {self.bill_payer_name}"
+    
+
+
+
+
+class BankInterest(models.Model):
+    receipt_no = models.CharField(max_length=50, unique=True, blank=True)
+    collection_date = models.DateField()
+    bank_name = models.CharField(max_length=40)
+    branch_name = models.CharField(max_length=40)
+    account_no = models.CharField(max_length=100)
+    interest_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    remarks = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
+
+
+    def save(self, *args, **kwargs):
+        if not self.receipt_no:
+            last = BankInterest.objects.order_by('-id').first()
+            if last and last.receipt_no.startswith('BI'):
+                last_number = int(last.receipt_no[4:])
+                self.receipt_no = f'BI{last_number + 1:04d}'
+            else:
+                self.receipt_no = 'BI0001'
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.receipt_no} - {self.bank_name}"
+

@@ -157,3 +157,18 @@ class EntryFeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntryFee
         fields = '__all__'
+
+
+
+
+class BillCollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BillCollection
+        fields = '__all__'
+
+
+
+class BankInterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankInterest
+        fields = '__all__'

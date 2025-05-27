@@ -32,5 +32,11 @@ urlpatterns = [
     path('entry-fees/<int:id>/', EntryFeeDetailView.as_view(), name='entry-fee-details'),
 
 
+    path('electricity-bill/', BillCollectionListCreateAPIView.as_view(), name='electricity-bill-list-create'),
+    path('electricity-bill/<int:id>/', BillCollectionDetailView.as_view(), name='electricity-bill-detail'),
+
+
+    path('bank-interest/', BankInterestListCreateAPIView.as_view(), name='bank-interest-list-create'),
+    path('bank-interest/<int:id>/', BankInterestDetailView.as_view(), name='bank-interest-detail'),
     
 ]

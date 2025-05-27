@@ -172,3 +172,30 @@ class EntryFeeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = EntryFee.objects.all()
     serializer_class = EntryFeeSerializer
     lookup_field = 'id'
+
+
+
+
+
+class BillCollectionListCreateAPIView(generics.ListCreateAPIView):
+    queryset = BillCollection.objects.all().order_by('-collection_date')
+    serializer_class = BillCollectionSerializer
+
+
+class BillCollectionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = BillCollection.objects.all()
+    serializer_class = BillCollectionSerializer
+    lookup_field = 'id'
+
+
+
+
+class BankInterestListCreateAPIView(generics.ListCreateAPIView):
+    queryset = BankInterest.objects.all().order_by('-collection_date')
+    serializer_class = BankInterestSerializer
+
+
+class BankInterestDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = BankInterest.objects.all()
+    serializer_class = BankInterestSerializer
+    lookup_field = 'id'
