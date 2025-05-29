@@ -306,7 +306,6 @@ class BillCollection(models.Model):
 
 
 
-
 class BankInterest(models.Model):
     receipt_no = models.CharField(max_length=50, unique=True, blank=True)
     collection_date = models.DateField()
