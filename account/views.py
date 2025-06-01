@@ -21,24 +21,37 @@ def income_report_by_day_all_months(request):
         year = timezone.now().year
         data = defaultdict(lambda: defaultdict(Decimal))
 
-        def aggregate(model, amount_field, label):
+        def aggregate(model, amount_field, label, group_by=None):
             try:
+
                 qs = model.objects.filter(
                     created_at__year=year
                 ).annotate(
-                    trunc_date=TruncDate(F('created_at'))
-                ).values('trunc_date').annotate(
+                    trunc_date=TruncDate('created_at')
+                )
+
+                values_fields = ['trunc_date']
+                if group_by:
+                    values_fields.append(group_by)
+
+                qs = qs.values(*values_fields).annotate(
                     total=Sum(amount_field)
                 )
+
                 for item in qs:
+                    key = label
+                    if group_by:
+                        key = item[group_by]
+        
                     total = item['total'] if item['total'] is not None else 0
-                    data[item['trunc_date']][label] += Decimal(str(total))
+                    data[item['trunc_date']][key] += Decimal(str(total))
+
             except Exception as e:
                 logger.error(f"Error processing {model.__name__}: {str(e)}")
                 raise ValueError(f"{label} aggregation failed: {str(e)}")
 
         # Income from legal services
-        aggregate(Vokalatnama, 'total_amount', 'Vokalatnama')
+        aggregate(Vokalatnama, 'total_amount', 'Vokalatnama','sale_type')
         aggregate(Bailbond, 'total_amount', 'Bailbond')
         
         # Associate fees
@@ -55,13 +68,14 @@ def income_report_by_day_all_months(request):
         aggregate(EntryFee, 'entry_fee', 'Entry Fee')
         
         # Other income
-        # aggregate(AdvocateChange, 'fee', 'Advocate Change Fee')
+        aggregate(AdvocateChange, 'fee', 'Advocate Change Fee')
         aggregate(FundCollection, 'fund_amount', 'Donations')
         aggregate(BillCollection, 'bill_amount', 'Bill Collection')
         aggregate(BankInterest, 'interest_amount', 'Bank Interest')
 
         # Generate sorted columns and rows
-        all_categories = sorted({k for v in data.values() for k in v.keys()})
+        all_categories = list({k for v in data.values() for k in v.keys()})
+
         final_rows = [
             {
                 'trunc_date': date.strftime('%Y-%m-%d'),
@@ -92,9 +106,16 @@ def income_report_by_day_all_months(request):
 
 
 
+
 class ProbableIncomeViewSet(viewsets.ModelViewSet):
     queryset = ProbableIncome.objects.all()
     serializer_class = ProbableIncomeSerializer
+
+
+
+class ProbableExpanseViewSet(viewsets.ModelViewSet):
+    queryset = ProbableExpanse.objects.all()
+    serializer_class = ProbableExpanseSerializer
 
 
 
