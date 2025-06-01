@@ -69,7 +69,7 @@ def income_report_by_day_all_months(request):
         
         # Other income
         aggregate(AdvocateChange, 'fee', 'Advocate Change Fee')
-        aggregate(FundCollection, 'fund_amount', 'Donations')
+        aggregate(FundCollection, 'fund_amount', 'Donation', 'donation_type')
         aggregate(BillCollection, 'bill_amount', 'Bill Collection')
         aggregate(BankInterest, 'interest_amount', 'Bank Interest')
 
