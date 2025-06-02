@@ -10,6 +10,8 @@ from .models import *
 from .serializers import *
 from rest_framework import viewsets
 import logging
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+
 
 
 
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 @api_view(['GET'])
 def income_report_by_day_all_months(request):
     try:
-        year = timezone.now().year
+        year = int(request.GET.get('year', timezone.now().year))
         data = defaultdict(lambda: defaultdict(Decimal))
 
         def aggregate(model, amount_field, label, group_by=None):
@@ -107,15 +109,67 @@ def income_report_by_day_all_months(request):
 
 
 
-class ProbableIncomeViewSet(viewsets.ModelViewSet):
+
+# ------------------- Probable Income -------------------
+class ProbableIncomeListCreateView(ListCreateAPIView):
     queryset = ProbableIncome.objects.all()
     serializer_class = ProbableIncomeSerializer
 
+    def get_queryset(self):
+        year = self.request.query_params.get('year')
+        if year and year.isdigit():
+            return ProbableIncome.objects.filter(year=year)
+        return ProbableIncome.objects.all()
 
 
-class ProbableExpanseViewSet(viewsets.ModelViewSet):
+
+class ProbableIncomeUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    queryset = ProbableIncome.objects.all()
+    serializer_class = ProbableIncomeSerializer
+    lookup_field = 'id'
+
+
+
+
+# ------------------- Probable Expanse -------------------
+class ProbableExpanseListCreateView(ListCreateAPIView):
     queryset = ProbableExpanse.objects.all()
     serializer_class = ProbableExpanseSerializer
+
+    def get_queryset(self):
+        year = self.request.query_params.get('year')
+        if year and year.isdigit():
+            return ProbableExpanse.objects.filter(year=year)
+        return ProbableExpanse.objects.all()
+
+
+
+class ProbableExpanseUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    queryset = ProbableExpanse.objects.all()
+    serializer_class = ProbableExpanseSerializer
+    lookup_field = 'id'
+
+
+
+
+# ------------------- Actual Expanse -------------------
+class ActualExpanseListCreateView(ListCreateAPIView):
+    queryset = ActualExpanse.objects.all()
+    serializer_class = ActualExpanseSerializer
+
+    def get_queryset(self):
+        year = self.request.query_params.get('year')
+        if year and year.isdigit():
+            return ActualExpanse.objects.filter(year=year)
+        return ActualExpanse.objects.all()
+
+
+
+class ActualExpanseUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    queryset = ActualExpanse.objects.all()
+    serializer_class = ActualExpanseSerializer
+    lookup_field = 'id'
+
 
 
 

@@ -14,3 +14,11 @@ class ProbableExpanseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProbableExpanse
         fields = '__all__'
+
+
+
+class ActualExpanseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActualExpanse
+        fields = '__all__'
+

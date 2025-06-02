@@ -26,7 +26,6 @@ class vokalotnamaRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView
 
 
 
-
 class bailBondListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Bailbond.objects.all().order_by('-id')
@@ -43,7 +42,6 @@ class bailBondRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-
 class AssociateRegistrationListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = AssociateRegistration.objects.all().order_by('-registration_date')
@@ -55,7 +53,6 @@ class AssociateRegistrationRetrieveUpdateDeleteView(generics.RetrieveUpdateDestr
     queryset = AssociateRegistration.objects.all()
     serializer_class = AssociateRegistrationSerializer
     lookup_field = 'id'
-
 
 
 
