@@ -15,4 +15,10 @@ urlpatterns = [
     path('renters/<int:id>/', RenterRetrieveUpdateDestroyView.as_view(), name='renter-detail'),
     path('banks/', BankListCreateView.as_view(), name='bank-list-create'),
     path('banks/<int:id>/', BankRetrieveUpdateDestroyView.as_view(), name='bank-detail'),
+
+    path('expanse_category/', ExpanseCategoryListCreateView.as_view(), name='expanse_category-list'),
+    path('expanse_category/<int:id>/', ExpanseCategoryRetrieveUpdateDestroyView.as_view(), name='expanse_category-detail'),
+
+    path('income_category/', IncomeCategoryListCreateView.as_view(), name='income-category-list'),
+    path('income_category/<int:id>/', IncomeCategoryRetrieveUpdateDestroyView.as_view(), name='income-category-detail'),
 ]

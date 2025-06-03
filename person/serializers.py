@@ -66,3 +66,18 @@ class BankSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bank
         fields = '__all__'
+
+
+
+class ExpanseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpanseCategory
+        fields = '__all__'
+
+
+
+class IncomeCategorySerializer(serializers.ModelSerializer):
+     class Meta:
+        model = IncomeCategory
+        fields = '__all__'
+

@@ -124,3 +124,12 @@ class Bank(models.Model):
 
     def __str__(self):
         return f"{self.bank_name} - {self.branch_name}"
+    
+
+
+class ExpanseCategory(models.Model):
+    category = models.CharField(max_length=100)
+
+
+class IncomeCategory(models.Model):
+    category = models.CharField(max_length=100)

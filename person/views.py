@@ -99,3 +99,31 @@ class BankRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Bank.objects.all()
     serializer_class = BankSerializer
     lookup_field = 'id'
+
+
+#Expanse Category
+class ExpanseCategoryListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = ExpanseCategory.objects.all()
+    serializer_class = ExpanseCategorySerializer
+
+
+class ExpanseCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = ExpanseCategory.objects.all()
+    serializer_class = ExpanseCategorySerializer
+    lookup_field = 'id'
+
+
+#Expanse Category
+class IncomeCategoryListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = IncomeCategory.objects.all()
+    serializer_class = IncomeCategorySerializer
+
+
+class IncomeCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = IncomeCategory.objects.all()
+    serializer_class = IncomeCategorySerializer
+    lookup_field = 'id'

@@ -25,6 +25,7 @@ class ProbableExpanse(models.Model):
 class ActualExpanse(models.Model):
     expanseCategory = models.CharField(max_length=255)
     actualExpanse = models.DecimalField(max_digits=12, decimal_places=2,blank=True, null = True)
+    date = models.DateField(blank=True, null = True)
     year = models.PositiveIntegerField(blank=True, null = True)
 
     def __str__(self):
