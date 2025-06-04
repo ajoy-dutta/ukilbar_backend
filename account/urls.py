@@ -3,14 +3,12 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import * 
 
-# router = DefaultRouter()
-# router.register(r'probable_income', ProbableIncomeViewSet)
-# router.register(r'probable_expanse', ProbableExpanseViewSet)
-# router.register(r'actual_expanse', ActualExpanseViewSet)
+
 
 urlpatterns = [
-    # path('', include(router.urls)),
     path('income-report/', income_report_by_day_all_months, name='income-report'),
+
+    path('general-income-report/', general_income_report, name='general-income-report'),
 
     path('probable_income/', ProbableIncomeListCreateView.as_view()),
     path('probable_income/<int:id>/', ProbableIncomeUpdateDestroyView.as_view()),

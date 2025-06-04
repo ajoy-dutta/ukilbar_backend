@@ -174,3 +174,71 @@ class ActualExpanseUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
 
 
+
+@api_view(['GET'])
+def general_income_report(request):
+    try:
+        year = int(request.GET.get('year', timezone.now().year))
+        sales = []
+
+        def collect_entries(model, amount_field, label, extra_fields=None):
+            try:
+                fields_to_fetch = ['id', amount_field, 'created_at']
+                if extra_fields:
+                    if isinstance(extra_fields, str):
+                      extra_fields = [extra_fields]
+                    fields_to_fetch += extra_fields
+
+                print(fields_to_fetch)
+                entries = model.objects.filter(created_at__year=year).values(*fields_to_fetch)
+
+                
+                for entry in entries:
+                    source = entry.get(extra_fields) if extra_fields else label
+                    print("entry", entry)
+                    record = {
+                        'source': source,
+                        'id': entry['id'],
+                        'amount': float(entry[amount_field]),
+                        'date': entry['created_at'].strftime('%Y-%m-%d'),
+                    }
+                    sales.append(record)
+
+            except Exception as e:
+                logger.error(f"Error collecting from {model.__name__}: {str(e)}")
+
+        # Legal service sales
+        collect_entries(Vokalatnama, 'total_amount', 'Vokalatnama','sale_type')
+        collect_entries(Bailbond, 'total_amount', 'Bailbond')
+
+        # Associate fees
+        collect_entries(AssociateRegistration, 'total', 'Associate Registration')
+        collect_entries(AssociateRenewal, 'renewal_fee', 'Associate Renewal')
+
+        # Rent
+        collect_entries(RentCollection, 'rent_amount', 'House Rent')
+        collect_entries(HallRentCollection, 'rent_amount', 'Hall Rent')
+
+        # Advocate fees
+        collect_entries(MonthlyFee, 'total_monthly_amount', 'Monthly Fee')
+        collect_entries(BarAssociationFee, 'total_amount', 'Bar Association Fee')
+        collect_entries(EntryFee, 'entry_fee', 'Entry Fee')
+
+        # Other income
+        collect_entries(AdvocateChange, 'fee', 'Advocate Change Fee')
+        collect_entries(FundCollection, 'fund_amount', 'Donation', extra_fields=['donation_type'])
+        collect_entries(BillCollection, 'bill_amount', 'Bill Collection')
+        collect_entries(BankInterest, 'interest_amount', 'Bank Interest')
+
+        # Sort by date (optional)
+        sales.sort(key=lambda x: x['date'])
+
+        return Response({
+            'year': year,
+            'total_records': len(sales),
+            'records': sales
+        })
+
+    except Exception as e:
+        logger.exception("Error generating detailed income report")
+        return Response({"error": str(e)}, status=500)
