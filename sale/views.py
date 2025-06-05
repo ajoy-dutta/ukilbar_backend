@@ -26,6 +26,7 @@ class vokalotnamaRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView
 
 
 
+
 class bailBondListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Bailbond.objects.all().order_by('-id')
@@ -36,6 +37,23 @@ class bailBondRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Bailbond.objects.all()
     serializer_class = BailbondSalesSerializer
+    lookup_field = 'id'
+
+
+
+
+
+
+class FormListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = FormSale.objects.all().order_by('-id')
+    serializer_class = FormSaleSerializer
+
+
+class FormRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = FormSale.objects.all()
+    serializer_class = FormSaleSerializer
     lookup_field = 'id'
 
 

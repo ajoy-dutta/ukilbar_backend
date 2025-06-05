@@ -90,6 +90,51 @@ class BailbondSalesSerializer(serializers.ModelSerializer):
 
 
 
+
+
+class FormSerialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FormSerial
+        fields = ['id', 'from_serial', 'to_serial', 'total']
+
+
+
+class FormSaleSerializer(serializers.ModelSerializer):
+    form_serials = FormSerialSerializer(many=True)
+
+    class Meta:
+        model = FormSale
+        fields = ['id', 'receipt_no', 'sales_date', 'building_name', 'form_name',
+                  'remarks', 'form_serials', 'total_count', 'price', 'total_amount']
+
+    def create(self, validated_data):
+        form_serials_data = validated_data.pop('form_serials')
+        sale = FormSale.objects.create(**validated_data)
+        for serial in form_serials_data:
+            FormSerial.objects.create(form_sale=sale, **serial)
+        return sale
+    
+
+    def update(self, instance, validated_data):
+        serials_data = validated_data.pop('form_serials', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if serials_data is not None:
+            instance.serials.all().delete()
+            for serial_data in serials_data:
+                FormSerial.objects.create(sale=instance, **serial_data)
+
+        return instance
+    
+
+
+
+
+
+
 class AssociateRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssociateRegistration

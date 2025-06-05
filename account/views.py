@@ -194,7 +194,7 @@ def general_income_report(request):
 
                 
                 for entry in entries:
-                    source = entry.get(extra_fields) if extra_fields else label
+                    source = entry.get(extra_fields[0]) if extra_fields else label
                     print("entry", entry)
                     record = {
                         'source': source,
@@ -242,3 +242,38 @@ def general_income_report(request):
     except Exception as e:
         logger.exception("Error generating detailed income report")
         return Response({"error": str(e)}, status=500)
+
+
+
+
+
+
+class IncomePercentageListCreateView(ListCreateAPIView):
+    queryset = IncomePercentage.objects.all()
+    serializer_class = IncomePercentageSerializer
+
+
+class IncomePercentageUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    queryset = IncomePercentage.objects.all()
+    serializer_class = IncomePercentageSerializer
+    lookup_field = 'id'
+
+
+
+
+
+
+
+class WelfareFundPercentageListCreateView(ListCreateAPIView):
+    queryset = WelfareFundPercentage.objects.all()
+    serializer_class = WelfareFundPercentageSerializer
+
+
+class WelfareFundPercentageUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    queryset = WelfareFundPercentage.objects.all()
+    serializer_class = WelfareFundPercentageSerializer
+    lookup_field = 'id'
+
+
+
+

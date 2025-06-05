@@ -22,3 +22,17 @@ class ActualExpanseSerializer(serializers.ModelSerializer):
         model = ActualExpanse
         fields = '__all__'
 
+
+
+class IncomePercentageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IncomePercentage
+        fields = '__all__'
+
+
+
+class WelfareFundPercentageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WelfareFundPercentage
+        fields = '__all__'
+

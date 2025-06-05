@@ -18,4 +18,10 @@ urlpatterns = [
 
     path('actual_expanse/', ActualExpanseListCreateView.as_view()),
     path('actual_expanse/<int:id>/', ActualExpanseUpdateDestroyView.as_view()),
+
+    path('income-category-percentage/', IncomePercentageListCreateView.as_view()),
+    path('income-category-percentage/<int:id>/', IncomePercentageUpdateDestroyView.as_view()),
+
+    path('welfare-category-percentage/', WelfareFundPercentageListCreateView.as_view()),
+    path('welfare-category-percentage/<int:id>/', WelfareFundPercentageUpdateDestroyView.as_view()),
 ]

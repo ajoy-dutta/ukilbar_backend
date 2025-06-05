@@ -28,7 +28,6 @@ class Vokalatnama(models.Model):
 
 
 
-
 class VokalatnamaSerial(models.Model):
     sale = models.ForeignKey(Vokalatnama, related_name='serials', on_delete=models.CASCADE)
     from_serial = models.IntegerField()
@@ -39,6 +38,11 @@ class VokalatnamaSerial(models.Model):
     def __str__(self):
         return f"Serial {self.from_serial} to {self.to_serial}"
     
+
+
+
+
+
 
 
 class Bailbond(models.Model):
@@ -65,6 +69,39 @@ class BailbondSerial(models.Model):
     def __str__(self):
         return f"Serial {self.from_serial} to {self.to_serial}"
     
+
+
+
+
+
+
+
+class FormSale(models.Model):
+    receipt_no = models.CharField(max_length=50)
+    sales_date = models.DateField()
+    building_name = models.CharField(max_length=100)
+    form_name = models.CharField(max_length=100)
+    remarks = models.TextField(blank=True, null=True)
+    total_count = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Receipt {self.receipt_no}"
+    
+
+class FormSerial(models.Model):
+    form_sale = models.ForeignKey(FormSale, related_name="form_serials", on_delete=models.CASCADE)
+    from_serial = models.CharField(max_length=50)
+    to_serial = models.CharField(max_length=50)
+    total = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.from_serial} - {self.to_serial}"
+
+
+
+
 
 
 
