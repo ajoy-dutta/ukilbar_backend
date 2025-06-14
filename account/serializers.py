@@ -36,3 +36,18 @@ class WelfareFundPercentageSerializer(serializers.ModelSerializer):
         model = WelfareFundPercentage
         fields = '__all__'
 
+
+
+
+class GeneralFundExpanseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GeneralFundExpanseCategory
+        fields = '__all__'
+
+
+
+class WelfareFundExpanseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WelfareFundExpanseCategory
+        fields = '__all__'
+

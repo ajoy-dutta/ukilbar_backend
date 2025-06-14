@@ -24,4 +24,11 @@ urlpatterns = [
 
     path('welfare-category-percentage/', WelfareFundPercentageListCreateView.as_view()),
     path('welfare-category-percentage/<int:id>/', WelfareFundPercentageUpdateDestroyView.as_view()),
+
+
+    path('general-expense-category/', GeneralFundExpanseCategoryListCreateView.as_view()),
+    path('general-expense-category/<int:id>/', GeneralFundExpanseCategoryDetailsView.as_view()),
+
+    path('welfare-expense-category/', WelfareFundExpanseCategoryListCreateView.as_view()),
+    path('welfare-expense-category/<int:id>/', WelfareFundExpanseCategoryDetailsView.as_view()),
 ]
