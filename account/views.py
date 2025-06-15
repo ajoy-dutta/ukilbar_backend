@@ -277,3 +277,33 @@ class WelfareFundPercentageUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
 
 
+
+class GeneralFundExpanseCategoryListCreateView(ListCreateAPIView):
+    queryset = GeneralFundExpanseCategory.objects.all()
+    serializer_class = GeneralFundExpanseCategorySerializer
+
+
+class GeneralFundExpanseCategoryDetailsView(RetrieveUpdateDestroyAPIView):
+    queryset = GeneralFundExpanseCategory.objects.all()
+    serializer_class = GeneralFundExpanseCategorySerializer
+    lookup_field = 'id'
+
+
+
+
+
+
+class WelfareFundExpanseCategoryListCreateView(ListCreateAPIView):
+    queryset = WelfareFundExpanseCategory.objects.all()
+    serializer_class = WelfareFundExpanseCategorySerializer
+
+
+class WelfareFundExpanseCategoryDetailsView(RetrieveUpdateDestroyAPIView):
+    queryset = WelfareFundExpanseCategory.objects.all()
+    serializer_class = WelfareFundExpanseCategorySerializer
+    lookup_field = 'id'
+
+
+
+
+

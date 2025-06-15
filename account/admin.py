@@ -7,3 +7,6 @@ admin.site.register(ProbableExpanse)
 admin.site.register(ActualExpanse)
 admin.site.register(IncomePercentage)
 admin.site.register(WelfareFundPercentage)
+admin.site.register(GeneralFundExpanseCategory)
+admin.site.register(WelfareFundExpanseCategory)
+

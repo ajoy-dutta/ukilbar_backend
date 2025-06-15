@@ -45,3 +45,20 @@ class WelfareFundPercentage(models.Model):
     percentage = models.DecimalField(max_digits=12, decimal_places=2,blank=True, null = True)
     def __str__(self):
         return self.category-self.percentage
+    
+
+
+
+class GeneralFundExpanseCategory(models.Model):
+    category = models.CharField(max_length=255)
+    percentage = models.DecimalField(max_digits=12, decimal_places=2,blank=True, null = True)
+    def __str__(self):
+        return self.category-self.percentage
+
+
+class WelfareFundExpanseCategory(models.Model):
+    category = models.CharField(max_length=255)
+    percentage = models.DecimalField(max_digits=12, decimal_places=2,blank=True, null = True)
+    def __str__(self):
+        return self.category-self.percentage
+
