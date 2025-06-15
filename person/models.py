@@ -133,3 +133,18 @@ class ExpanseCategory(models.Model):
 
 class IncomeCategory(models.Model):
     category = models.CharField(max_length=100)
+
+
+class PhotoGallery(models.Model):
+    image = models.ImageField(upload_to='img/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    caption=models.TextField(blank=True, null=True)
+    TYPE_CHOICES = [
+        ("general", "General"),
+        ("paper-cut", "Paper Cut"),
+    ]
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="general")
+
+    def __str__(self):
+        return f"{self.type} - {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+

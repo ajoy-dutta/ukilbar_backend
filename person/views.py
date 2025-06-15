@@ -127,3 +127,12 @@ class IncomeCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIV
     queryset = IncomeCategory.objects.all()
     serializer_class = IncomeCategorySerializer
     lookup_field = 'id'
+
+
+class PhotoGalleryListCreateView(generics.ListCreateAPIView):
+    queryset = PhotoGallery.objects.all().order_by('-created_at')
+    serializer_class = PhotoGallerySerializer
+
+class PhotoGalleryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = PhotoGallery.objects.all()
+    serializer_class = PhotoGallerySerializer
