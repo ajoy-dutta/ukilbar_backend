@@ -140,8 +140,8 @@ class PhotoGallery(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     caption=models.TextField(blank=True, null=True)
     TYPE_CHOICES = [
-        ("general", "General"),
-        ("paper-cut", "Paper Cut"),
+        ("general", "Photos"),
+        ("paper-cut", "Paper Cutting"),
     ]
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="general")
 
