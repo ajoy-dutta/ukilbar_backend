@@ -23,7 +23,6 @@ class VokalatnamaSalesSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        # print(validated_data)
         serials_data = validated_data.pop('serials')
         print(serials_data)
         sale = Vokalatnama.objects.create(**validated_data)
