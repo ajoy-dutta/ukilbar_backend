@@ -14,7 +14,8 @@ migrations
 *.sqlite3
 *.log
 
-*/migrations/*
+**/migrations/
+!*/migrations/__init__.py
 
 
 
@@ -31,7 +32,11 @@ migrations
 venv/
 .env/
 
-
+*.pyc
+db.sqlite3
+staticfiles/
+media/
+local_settings.py
 
 # Static files
 static/

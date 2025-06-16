@@ -21,4 +21,7 @@ urlpatterns = [
 
     path('income_category/', IncomeCategoryListCreateView.as_view(), name='income-category-list'),
     path('income_category/<int:id>/', IncomeCategoryRetrieveUpdateDestroyView.as_view(), name='income-category-detail'),
+    
+    path('gallery/', PhotoGalleryListCreateView.as_view(), name='gallery-list-create'),
+    path('gallery/<int:pk>/', PhotoGalleryDetailView.as_view(), name='gallery-detail'),
 ]

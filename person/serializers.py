@@ -135,3 +135,7 @@ class IncomeCategorySerializer(serializers.ModelSerializer):
         model = IncomeCategory
         fields = '__all__'
 
+class PhotoGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhotoGallery
+        fields = '__all__' 
