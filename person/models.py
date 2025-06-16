@@ -35,19 +35,6 @@ class Advocate(models.Model):
     blood_group = models.CharField(max_length=5, choices=BLOOD_GROUP_CHOICES, blank=True)
     religion = models.CharField(max_length=50, blank=True)
 
-    # Children
-    son = models.CharField(max_length=100, blank=True)
-    daughter = models.CharField(max_length=100, blank=True)
-
-    # Nominee Information
-    nomini_name = models.CharField(max_length=100, blank=True)
-    nomini_address = models.TextField(blank=True)
-    nomini_relationship = models.CharField(max_length=50, blank=True)
-    nomini_phone = models.CharField(max_length=15, blank=True)
-    nomini_birth_year = models.PositiveIntegerField(blank=True, null=True)
-    nomini_nid = models.CharField(max_length=20, blank=True)
-    nomini_birth_certificate = models.CharField(max_length=20, blank=True)
-
     # Address Info
     current_address = models.TextField(blank=True)
     permanent_address = models.TextField(blank=True)
@@ -70,7 +57,11 @@ class Advocate(models.Model):
     pension_details = models.TextField(blank=True)
     is_from_another_bar = models.BooleanField(default=False)
     practicing_court_name = models.CharField(max_length=100, blank=True)
-    
+
+    # Status
+    status = models.CharField(max_length=30, blank=True, null=True)
+    retirement_date = models.DateField(blank=True, null=True)
+    death_date = models.DateField(blank=True, null=True)
 
     # Remarks
     remarks = models.TextField(blank=True)
@@ -82,7 +73,31 @@ class Advocate(models.Model):
 
 
 
+class Child(models.Model):
+    advocate = models.ForeignKey(Advocate, related_name='children', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True)
+  
+    def __str__(self):
+        return f"{self.name} ({self.gender})"
+    
 
+class Nominee(models.Model):
+    advocate = models.ForeignKey(Advocate, related_name='nominees', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    address = models.TextField(blank=True)
+    relationship = models.CharField(max_length=50, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    birth_year = models.PositiveIntegerField(blank=True, null=True)
+    nid = models.CharField(max_length=20, blank=True)
+    birth_certificate = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.relationship})"
+
+    
+
+    
 class Building(models.Model):
     building_name = models.CharField(max_length=100)
     institute = models.CharField(max_length=100)

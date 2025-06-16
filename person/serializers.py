@@ -34,10 +34,64 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 
+
+class ChildSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Child
+        fields = ['id', 'name', 'gender']
+
+
+
+class NomineeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nominee
+        fields = ['id', 'name', 'address', 'relationship', 'phone', 'birth_year', 'nid', 'birth_certificate']
+
+
+
 class AdvocateSerializer(serializers.ModelSerializer):
+    children = ChildSerializer(many=True, required=False)
+    nominees = NomineeSerializer(many=True, required=False)
+
     class Meta:
         model = Advocate
         fields = '__all__'
+
+    def create(self, validated_data):
+        children_data = validated_data.pop('children', [])
+        nominees_data = validated_data.pop('nominees', [])
+        advocate = Advocate.objects.create(**validated_data)
+
+        for child in children_data:
+            Child.objects.create(advocate=advocate, **child)
+
+        for nominee in nominees_data:
+            Nominee.objects.create(advocate=advocate, **nominee)
+
+        return advocate
+
+    def update(self, instance, validated_data):
+        children_data = validated_data.pop('children', [])
+        nominees_data = validated_data.pop('nominees', [])
+
+        # Update main Advocate fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Optional: Delete and recreate children
+        instance.children.all().delete()
+        for child in children_data:
+            Child.objects.create(advocate=instance, **child)
+
+        # Optional: Delete and recreate nominees
+        instance.nominees.all().delete()
+        for nominee in nominees_data:
+            Nominee.objects.create(advocate=instance, **nominee)
+
+        return instance
+
+
 
 
 class BuildingSerializer(serializers.ModelSerializer):
