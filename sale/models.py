@@ -42,9 +42,6 @@ class VokalatnamaSerial(models.Model):
 
 
 
-
-
-
 class Bailbond(models.Model):
     receipt_no = models.CharField(max_length=255, blank=True, null = True)
     building_name = models.CharField(max_length=100,blank=True, null = True)
@@ -188,7 +185,7 @@ class MonthlyFee(models.Model):
     to_year = models.IntegerField(blank=True, null = True)
     monthly_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total_monthly_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    monthly_payment_type = models.CharField(max_length=50)  
+    payment_type = models.CharField(max_length=50, blank=True, null = True)  
     remarks2 = models.TextField(blank=True, null = True)
     created_at = models.DateTimeField(default=timezone.now, blank=True)
 
@@ -210,6 +207,7 @@ class BarAssociationFee(models.Model):
     benevolent_delay_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     relief_fund_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    payment_type = models.CharField(max_length=50, blank=True, null = True)  
     court_type = models.CharField(max_length=100) 
     remarks3 = models.TextField(blank=True, null = True)
     created_at = models.DateTimeField(default=timezone.now, blank=True)
@@ -285,6 +283,7 @@ class EntryFee(models.Model):
     advocate_id = models.CharField(max_length=20)
     collection_date = models.DateField()
     entry_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_type = models.CharField(max_length=50,blank=True, null = True)  
     remarks4 = models.TextField(blank=True, null=True)
     receipt_no = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now, blank=True)

@@ -93,38 +93,54 @@ class AssociateRenewalDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ConsolidatedFeeView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+
     def post(self, request):
         data = request.data
 
-
         if data.get('house_fee_form') and data.get('house_rent'):
-            house_serializer = HouseRentSerializer(data = data['house_rent'])
+            house_serializer = HouseRentSerializer(data=data['house_rent'])
             if house_serializer.is_valid():
                 house_serializer.save()
             else:
                 return Response({'house_rent_errors': house_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-            
-        
+
+        if data.get('entry_fee_form') and data.get('Entry_Fee'):
+            entry_serializer = EntryFeeSerializer(data=data['Entry_Fee'])
+            if entry_serializer.is_valid():
+                entry_serializer.save()
+            else:
+                return Response({'entry_fee_errors': entry_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         if data.get('monthly_fee_form') and data.get('monthly_fee'):
-            MonthlyFee_serializer = MonthlyFeeSerializer(data = data['monthly_fee'])
-            if MonthlyFee_serializer.is_valid():
-                MonthlyFee_serializer.save()
+            monthly_serializer = MonthlyFeeSerializer(data=data['monthly_fee'])
+            if monthly_serializer.is_valid():
+                monthly_serializer.save()
             else:
-                return Response({'monthly_fee_errors': MonthlyFee_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-            
-
+                return Response({'monthly_fee_errors': monthly_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         if data.get('bar_association_form') and data.get('bar_association_fee'):
-            BarFee_serializer = BarFeeSerializer(data = data['bar_association_fee'])
-            if BarFee_serializer.is_valid():
-                BarFee_serializer.save()
+            bar_serializer = BarFeeSerializer(data=data['bar_association_fee'])
+            if bar_serializer.is_valid():
+                bar_serializer.save()
             else:
-                return Response({'bar_fee_errors': BarFee_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
+                return Response({'bar_fee_errors': bar_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'message': 'Data saved successfully'}, status=status.HTTP_201_CREATED)
+
+
+    def get(self, request):
+        house_fees = RentCollection.objects.all().values()
+        entry_fees = EntryFee.objects.all().values()
+        monthly_fees = MonthlyFee.objects.all().values()
+        bar_fees = BarAssociationFee.objects.all().values()
+
+        return Response({
+            'house_rent': list(house_fees),
+            'entry_fee': list(entry_fees),
+            'monthly_fee': list(monthly_fees),
+            'bar_association_fee': list(bar_fees),
+        })
 
 
 
