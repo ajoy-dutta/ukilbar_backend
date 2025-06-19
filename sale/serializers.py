@@ -150,6 +150,18 @@ class AssociateRenewalSerializer(serializers.ModelSerializer):
 
 
 
+
+
+class HallRentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HallRentCollection
+        fields = '__all__'
+
+
+
+
+
+
 class HouseRentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RentCollection
@@ -158,9 +170,9 @@ class HouseRentSerializer(serializers.ModelSerializer):
 
 
 
-class HallRentSerializer(serializers.ModelSerializer):
+class EntryFeeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = HallRentCollection
+        model = EntryFee
         fields = '__all__'
 
 
@@ -180,6 +192,78 @@ class BarFeeSerializer(serializers.ModelSerializer):
 
 
 
+class AdvocateAllFeeSerializer(serializers.ModelSerializer):
+    rentcollection_set = HouseRentSerializer(many=True, required=False)
+    entryfee_set = EntryFeeSerializer(many=True, required=False)
+    monthlyfee_set = MonthlyFeeSerializer(many=True, required=False)
+    barassociationfee_set = BarFeeSerializer(many=True, required=False)
+
+    class Meta:
+        model = AdvocateAllFee
+        fields = ['id', 'advocate_id', 'collection_date', 'receipt_no',
+                  'rentcollection_set', 'entryfee_set', 'monthlyfee_set', 'barassociationfee_set']
+
+    def create(self, validated_data):
+        rent_data = validated_data.pop('rentcollection_set', [])
+        entry_data = validated_data.pop('entryfee_set', [])
+        monthly_data = validated_data.pop('monthlyfee_set', [])
+        bar_data = validated_data.pop('barassociationfee_set', [])
+
+        print(rent_data,entry_data,monthly_data,bar_data)
+
+        advocate_fee = AdvocateAllFee.objects.create(**validated_data)
+
+        for rent in rent_data:
+            RentCollection.objects.create(advocate_all_fee=advocate_fee, **rent)
+
+        for entry in entry_data:
+            EntryFee.objects.create(advocate_all_fee=advocate_fee, **entry)
+
+        for monthly in monthly_data:
+            MonthlyFee.objects.create(advocate_all_fee=advocate_fee, **monthly)
+
+        for bar in bar_data:
+            BarAssociationFee.objects.create(advocate_all_fee=advocate_fee, **bar)
+
+        return advocate_fee
+    
+
+
+    def update(self, instance, validated_data):
+        rent_data = validated_data.pop('rentcollection_set', [])
+        entry_data = validated_data.pop('entryfee_set', [])
+        monthly_data = validated_data.pop('monthlyfee_set', [])
+        bar_data = validated_data.pop('barassociationfee_set', [])
+
+        # Update base AdvocateAllFee fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Optionally: delete old and recreate new nested items
+        instance.rentcollection_set.all().delete()
+        for rent in rent_data:
+            RentCollection.objects.create(advocate_all_fee=instance, **rent)
+
+        instance.entryfee_set.all().delete()
+        for entry in entry_data:
+            EntryFee.objects.create(advocate_all_fee=instance, **entry)
+
+        instance.monthlyfee_set.all().delete()
+        for monthly in monthly_data:
+            MonthlyFee.objects.create(advocate_all_fee=instance, **monthly)
+
+        instance.barassociationfee_set.all().delete()
+        for bar in bar_data:
+            BarAssociationFee.objects.create(advocate_all_fee=instance, **bar)
+
+        return instance
+
+
+
+
+
+
 class AdvocateChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdvocateChange
@@ -194,13 +278,6 @@ class FundCollectionSerializer(serializers.ModelSerializer):
         model = FundCollection
         fields = '__all__'
 
-
-
-
-class EntryFeeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EntryFee
-        fields = '__all__'
 
 
 

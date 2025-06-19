@@ -1,6 +1,9 @@
 from django.db import models
 from person.models import Advocate
 from django.utils import timezone
+import uuid
+from datetime import date
+
 
 
 
@@ -70,9 +73,6 @@ class BailbondSerial(models.Model):
 
 
 
-
-
-
 class FormSale(models.Model):
     receipt_no = models.CharField(max_length=50)
     sales_date = models.DateField()
@@ -130,25 +130,6 @@ class AssociateRenewal(models.Model):
     created_at = models.DateTimeField(default=timezone.now, blank=True)
 
 
-
-
-class RentCollection(models.Model):
-    collection_date = models.DateField()
-    advocate_id = models.CharField(max_length=20)
-    
-    rent_type = models.CharField(max_length=20)
-    month = models.CharField(max_length=20)
-    year = models.PositiveIntegerField(blank=True, null = True)
-    building_name = models.CharField(max_length=255)
-    floor = models.CharField(max_length=50, blank=True, null = True)
-    room = models.CharField(max_length=50, blank=True, null = True)
-    rent_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_type = models.CharField(max_length=50, blank=True, null = True)
-    remarks1 = models.TextField(blank=True, null = True)
-    created_at = models.DateTimeField(default=timezone.now, blank=True)
-
-    def __str__(self):
-        return f"{self.rent_type} Rent - {self.month} {self.year} - {self.advocate_id}"
     
 
 
@@ -175,30 +156,70 @@ class HallRentCollection(models.Model):
 
 
 
-class MonthlyFee(models.Model):
-    collection_date = models.DateField()
-    advocate_id = models.CharField(max_length=20)
 
-    from_month = models.IntegerField(blank=True, null = True)
-    from_year = models.IntegerField(blank=True, null = True)
-    to_month = models.IntegerField(blank=True, null = True)
-    to_year = models.IntegerField(blank=True, null = True)
-    monthly_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_monthly_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    payment_type = models.CharField(max_length=50, blank=True, null = True)  
-    remarks2 = models.TextField(blank=True, null = True)
+
+class AdvocateAllFee(models.Model):
+    advocate_id = models.CharField(max_length=20, blank=True,null=True)
+    collection_date = models.DateField(default=date.today, blank=True,null=True)
+    receipt_no = models.CharField(max_length=100, blank=True, null=True, unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.receipt_no:
+            self.receipt_no = self.generate_receipt_no()
+        super().save(*args, **kwargs)
+
+    def generate_receipt_no(self):
+        return f"ADV-{date.today().strftime('%Y%m%d')}-{uuid.uuid4().hex[:6].upper()}"
+
+    def __str__(self):
+        return f"{self.advocate_id} - {self.receipt_no}"
+
+
+
+
+
+
+class RentCollection(models.Model):
+    advocate_all_fee = models.ForeignKey(AdvocateAllFee, on_delete=models.CASCADE, related_name="rentcollection_set", null=True)
+    rent_type = models.CharField(max_length=20)
+    month = models.CharField(max_length=20)
+    year = models.PositiveIntegerField(blank=True, null = True)
+    building_name = models.CharField(max_length=255)
+    floor = models.CharField(max_length=50, blank=True, null = True)
+    room = models.CharField(max_length=50, blank=True, null = True)
+    rent_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_type = models.CharField(max_length=50, blank=True, null = True)
+    remarks1 = models.TextField(blank=True, null = True)
     created_at = models.DateTimeField(default=timezone.now, blank=True)
 
     def __str__(self):
-        return f"Monthly Fee - {self.advocate_id} ({self.from_month}/{self.from_year} to {self.to_month}/{self.to_year})"
+        return f"{self.rent_type} Rent - {self.month} {self.year}"
+    
+
+
+
+
+class MonthlyFee(models.Model):
+    advocate_all_fee = models.ForeignKey(AdvocateAllFee, on_delete=models.CASCADE, related_name="monthlyfee_set", null=True)
+    from_month = models.IntegerField(blank=True, null=True)
+    from_year = models.IntegerField(blank=True, null=True)
+    to_month = models.IntegerField(blank=True, null=True)
+    to_year = models.IntegerField(blank=True, null=True)
+    monthly_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_monthly_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    payment_type = models.CharField(max_length=50, blank=True, null=True)  
+    remarks2 = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
+
+    def __str__(self):
+        return f"Monthly Fee - ({self.from_month}/{self.from_year} to {self.to_month}/{self.to_year})"
+
     
 
 
 
 class BarAssociationFee(models.Model):
-    collection_date = models.DateField()
-    advocate_id = models.CharField(max_length=20)
-
+    advocate_all_fee = models.ForeignKey(AdvocateAllFee, on_delete=models.CASCADE, related_name="barassociationfee_set", null=True)
     yearly_from_year = models.IntegerField(blank=True, null = True)
     yearly_to_year = models.IntegerField(blank=True, null = True)
     yearly_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -213,7 +234,25 @@ class BarAssociationFee(models.Model):
     created_at = models.DateTimeField(default=timezone.now, blank=True)
 
     def __str__(self):
-        return f"Bar Association Fee - {self.advocate_id} ({self.yearly_from_year} to {self.yearly_to_year})"
+        return f"Bar Association Fee - ({self.yearly_from_year} to {self.yearly_to_year})"
+
+
+
+
+
+class EntryFee(models.Model):
+    advocate_all_fee = models.ForeignKey(AdvocateAllFee, on_delete=models.CASCADE, related_name="entryfee_set", null=True)
+    entry_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_type = models.CharField(max_length=50,blank=True, null = True)  
+    remarks4 = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
+    
+
+    def __str__(self):
+      return self.advocate_all_fee.advocate_id if self.advocate_all_fee else "No Advocate"
+
+    
+
 
 
 
@@ -277,32 +316,6 @@ class FundCollection(models.Model):
         return f"{self.receipt_no} - {self.fund_provider}"
     
 
-
-
-class EntryFee(models.Model):
-    advocate_id = models.CharField(max_length=20)
-    collection_date = models.DateField()
-    entry_fee = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_type = models.CharField(max_length=50,blank=True, null = True)  
-    remarks4 = models.TextField(blank=True, null=True)
-    receipt_no = models.CharField(max_length=100, blank=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now, blank=True)
-    
-
-    def save(self, *args, **kwargs):
-        if not self.receipt_no:
-            prefix = "EF"
-            last_entry = EntryFee.objects.filter(receipt_no__startswith=prefix).order_by('-id').first()
-            if last_entry:
-                last_number = int(last_entry.receipt_no[len(prefix):])
-                new_number = str(last_number + 1).zfill(6)
-            else:
-                new_number = "000001"
-            self.receipt_no = f"{prefix}{new_number}"
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"Entry Fee for Advocate {self.advocate_id} on {self.collection_date}"
 
 
 

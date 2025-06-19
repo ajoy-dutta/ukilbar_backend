@@ -18,7 +18,8 @@ urlpatterns = [
     path('associate-renewal/', AssociateRenewalListCreateView.as_view(), name='associate-renewal-create'),
     path('associate-renewal/<int:id>/', AssociateRenewalDetailView.as_view(), name='associate-renewal-detail'),
 
-    path('advocate-all-fees/', ConsolidatedFeeView.as_view(), name='advocate-all-fees'),
+    path('advocate-all-fees/', AdvocateAllFeeListView.as_view(), name='advocate-all-fees'),
+    path('advocate-all-fees/<int:pk>/', AdvocateAllFeeDetailView.as_view(), name='advocate-all-fee-detail'),
 
     path('shop-rent/', HallRentListCreateView.as_view(), name='shop-rent-create'),
     path('shop-rent/<int:id>/', HallRentDetailView.as_view(), name='shop-rent-detail'),
