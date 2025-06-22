@@ -162,4 +162,24 @@ class PhotoGallery(models.Model):
 
     def __str__(self):
         return f"{self.type} - {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+    
+
+
+class PositionList(models.Model):
+    position = models.CharField(max_length=100, blank=True, null=True)
+
+
+
+
+class CommitteeMember(models.Model):
+    year = models.IntegerField()
+    bar_registration_number = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=20)
+    committee_position = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.name} ({self.committee_position}) - {self.year}"
+
+
 

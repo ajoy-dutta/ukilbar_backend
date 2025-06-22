@@ -23,5 +23,11 @@ urlpatterns = [
     path('income_category/<int:id>/', IncomeCategoryRetrieveUpdateDestroyView.as_view(), name='income-category-detail'),
     
     path('gallery/', PhotoGalleryListCreateView.as_view(), name='gallery-list-create'),
-    path('gallery/<int:pk>/', PhotoGalleryDetailView.as_view(), name='gallery-detail'),
+    path('gallery/<int:id>/', PhotoGalleryDetailView.as_view(), name='gallery-detail'),
+
+    path('position-list/', PositionListCreateView.as_view(), name='position-list-create'),
+    path('position-list/<int:id>/', PositionListDetailView.as_view(), name='position-list-detail'),
+
+    path('committees/', CommitteeListCreateView.as_view(), name='committee-list-create'),
+    path('committees/<int:id>/', CommitteeDetailView.as_view(), name='committee-detail'),
 ]

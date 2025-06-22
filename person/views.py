@@ -129,10 +129,47 @@ class IncomeCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIV
     lookup_field = 'id'
 
 
+
+
+
 class PhotoGalleryListCreateView(generics.ListCreateAPIView):
     queryset = PhotoGallery.objects.all().order_by('-created_at')
     serializer_class = PhotoGallerySerializer
 
+
 class PhotoGalleryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = PhotoGallery.objects.all()
     serializer_class = PhotoGallerySerializer
+    lookup_field = 'id'
+
+
+
+
+
+
+class PositionListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = PositionList.objects.all()
+    serializer_class = PositionListSerializer
+
+
+class PositionListDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = PositionList.objects.all()
+    serializer_class = PositionListSerializer
+    lookup_field = 'id'
+
+
+
+
+
+class CommitteeListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = CommitteeMember.objects.all().order_by('-year')
+    serializer_class = CommitteeMemberSerializer
+    
+
+class CommitteeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CommitteeMember.objects.all()
+    serializer_class = CommitteeMemberSerializer
+    lookup_field = 'id'
