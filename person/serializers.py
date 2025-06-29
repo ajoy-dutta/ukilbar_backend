@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import *
 
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -52,14 +54,18 @@ class NomineeSerializer(serializers.ModelSerializer):
 class AdvocateSerializer(serializers.ModelSerializer):
     children = ChildSerializer(many=True, required=False)
     nominees = NomineeSerializer(many=True, required=False)
-    photo = serializers.SerializerMethodField()
+    photo = serializers.ImageField(required=False, allow_null=True)
+
+    photo_url = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Advocate
         fields = '__all__'
+        extra_fields = ['photo_url']
 
 
-    def get_photo(self, obj):
+    def get_photo_url(self, obj):
         request = self.context.get('request')
         if obj.photo and hasattr(obj.photo, 'url'):
             photo_url = obj.photo.url
@@ -84,6 +90,13 @@ class AdvocateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         children_data = validated_data.pop('children', [])
         nominees_data = validated_data.pop('nominees', [])
+
+
+        if 'photo' in validated_data:
+            photo = validated_data.pop('photo')
+            if photo is not None:
+                instance.photo = photo
+
 
         # Update main Advocate fields
         for attr, value in validated_data.items():
