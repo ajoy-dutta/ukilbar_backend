@@ -52,10 +52,21 @@ class NomineeSerializer(serializers.ModelSerializer):
 class AdvocateSerializer(serializers.ModelSerializer):
     children = ChildSerializer(many=True, required=False)
     nominees = NomineeSerializer(many=True, required=False)
+    photo = serializers.SerializerMethodField()
 
     class Meta:
         model = Advocate
         fields = '__all__'
+
+
+    def get_photo(self, obj):
+        request = self.context.get('request')
+        if obj.photo and hasattr(obj.photo, 'url'):
+            photo_url = obj.photo.url
+            if request is not None:
+                return request.build_absolute_uri(photo_url)
+            return photo_url
+        return None
 
     def create(self, validated_data):
         children_data = validated_data.pop('children', [])
@@ -155,6 +166,15 @@ class PositionListSerializer(serializers.ModelSerializer):
 
 
 class CommitteeMemberSerializer(serializers.ModelSerializer):
+    advocate = serializers.SerializerMethodField()
+
     class Meta:
         model = CommitteeMember
         fields = '__all__'
+
+    def get_advocate(self, obj):
+        advocate = Advocate.objects.filter(bar_registration_number=obj.bar_registration_number).first()
+        if advocate:
+            context = self.context 
+            return AdvocateSerializer(advocate, context=context).data
+        return None
