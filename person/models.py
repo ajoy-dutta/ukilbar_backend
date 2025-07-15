@@ -120,6 +120,8 @@ class Renter(models.Model):
     renter_name = models.CharField(max_length=100)
     address = models.TextField()
     phone = models.CharField(max_length=15)
+    from_date = models.DateField(blank=True, null= True)
+    to_date = models.DateField(blank=True, null= True)
     category = models.CharField(max_length=100)
     remarks = models.TextField(blank=True)
     building_name = models.ForeignKey('Building', on_delete=models.CASCADE, related_name='renters')
