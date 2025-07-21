@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'person',
     'sale',
     'account',
+    'sms',
 ]
 
 

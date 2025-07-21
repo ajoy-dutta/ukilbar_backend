@@ -182,8 +182,10 @@ class AdvocateAllFee(models.Model):
 class RentCollection(models.Model):
     advocate_all_fee = models.ForeignKey(AdvocateAllFee, on_delete=models.CASCADE, related_name="rentcollection_set", null=True)
     rent_type = models.CharField(max_length=20)
-    month = models.CharField(max_length=20)
-    year = models.PositiveIntegerField(blank=True, null = True)
+    from_month = models.CharField(max_length=20)
+    from_year = models.PositiveIntegerField(blank=True, null = True)
+    to_month = models.CharField(max_length=20,blank=True, null = True)
+    to_year = models.PositiveIntegerField(blank=True, null = True)
     building_name = models.CharField(max_length=255)
     floor = models.CharField(max_length=50, blank=True, null = True)
     room = models.CharField(max_length=50, blank=True, null = True)

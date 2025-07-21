@@ -6,6 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
 from rest_framework import generics
+import requests
+from person.models import Advocate
+
 
 
 
@@ -135,6 +138,50 @@ class AdvocateChangeListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = AdvocateChange.objects.all().order_by('-date')
     serializer_class = AdvocateChangeSerializer
+
+
+
+    def perform_create(self, serializer):
+        advocate_change = serializer.save()
+
+        self.send_sms_to_advocate(advocate_change)
+
+    def send_sms_to_advocate(self, advocate_change):
+        case_no = advocate_change.case_no
+        advocate_id = advocate_change.advocate_id
+        client_name = advocate_change.client_name
+        amount = advocate_change.fee
+
+        try:
+            advocate = Advocate.objects.get(bar_registration_number=advocate_id)
+            phone = advocate.phone
+        except Advocate.DoesNotExist:
+            print(f"Advocate with ID {advocate_id} not found.")
+            return
+
+        if phone:
+            message = (
+                f"Dear {advocate.name_english}, the case ({case_no}) of client "
+                f"{client_name} has been reassigned from you. "
+                f"Change fee: {amount} BDT. Thank you for your service."
+            )
+
+            try:
+                response = requests.post(
+                    "http://bulksmsbd.net/api/smsapi?",
+                    data={
+                        "api_key": "4EsPc8GQcKlWkHoiqvcC",
+                        "senderid": "8809617622419",
+                        "number": phone,
+                        "message": message
+                    }
+                )
+                
+                if response.status_code != 200:
+                    print(f"SMS API error: {response.text}")
+
+            except requests.RequestException as e:
+                print(f"Failed to send SMS: {e}")
 
 
 class AdvocateChangeDetailView(generics.RetrieveUpdateDestroyAPIView):

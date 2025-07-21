@@ -134,7 +134,7 @@ class FormModelSerializer(serializers.ModelSerializer):
 
 
 class RenterSerializer(serializers.ModelSerializer):
-    building_name = serializers.CharField(source='building_name.building_name', read_only=True)
+    building_details = BuildingSerializer(source='building', read_only=True)
     class Meta:
         model = Renter
         fields = '__all__'

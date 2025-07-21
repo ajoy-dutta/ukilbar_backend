@@ -124,10 +124,11 @@ class Renter(models.Model):
     to_date = models.DateField(blank=True, null= True)
     category = models.CharField(max_length=100)
     remarks = models.TextField(blank=True)
-    building_name = models.ForeignKey('Building', on_delete=models.CASCADE, related_name='renters')
+    building = models.ForeignKey('Building', on_delete=models.CASCADE, related_name='renters')
     floor_no = models.CharField(max_length=10)
     room_no = models.CharField(max_length=10)
     rent_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    security_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null= True)
 
     def __str__(self):
         return self.renter_name
