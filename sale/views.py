@@ -163,7 +163,7 @@ class AdvocateChangeListCreateView(generics.ListCreateAPIView):
             message = (
                 f"Dear {advocate.name_english}, the case ({case_no}) of client "
                 f"{client_name} has been reassigned from you. "
-                f"Change fee: {amount} BDT. Thank you for your service."
+                f"Change fee: {amount} BDT. District Bar Council, Jashore"
             )
 
             try:
