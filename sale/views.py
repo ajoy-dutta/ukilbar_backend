@@ -161,9 +161,10 @@ class AdvocateChangeListCreateView(generics.ListCreateAPIView):
 
         if phone:
             message = (
-                f"Dear {advocate.name_english}, the case ({case_no}) of client "
-                f"{client_name} has been reassigned from you. "
-                f"Change fee: {amount} BDT. District Bar Council, Jashore"
+                f"Learned Sir,\n"
+                f"Your client {client_name} has applied for change of lawyer in case {case_no}."
+                f"Fees: {amount}/- Taka has been accepted.\n"
+                f"You are informed."
             )
 
             try:

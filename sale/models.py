@@ -225,6 +225,7 @@ class BarAssociationFee(models.Model):
     yearly_from_year = models.IntegerField(blank=True, null = True)
     yearly_to_year = models.IntegerField(blank=True, null = True)
     yearly_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    yearly_fee_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     yearly_delay_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     benevolent_fund_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     benevolent_delay_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
